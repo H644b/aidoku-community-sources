@@ -1,0 +1,134 @@
+{
+  "filters": [
+    {
+      "key": "genre",
+      "type": "select",
+      "name": "Genre",
+      "options": [
+        "Any",
+        "Action",
+        "Adventure",
+        "Avant Garde",
+        "Boys Love",
+        "Comedy",
+        "Demons",
+        "Drama",
+        "Ecchi",
+        "Fantasy",
+        "Girls Love",
+        "Gourmet",
+        "Harem",
+        "Horror",
+        "Isekai",
+        "Iyashikei",
+        "Josei",
+        "Kids",
+        "Magic",
+        "Mahou Shoujo",
+        "Martial Arts",
+        "Mecha",
+        "Military",
+        "Music",
+        "Mystery",
+        "Parody",
+        "Psychological",
+        "Reverse Harem",
+        "Romance",
+        "School",
+        "Sci-Fi",
+        "Seinen",
+        "Shoujo",
+        "Shounen",
+        "Slice of Life",
+        "Space",
+        "Sports",
+        "Super Power",
+        "Supernatural",
+        "Suspense",
+        "Thriller",
+        "Vampire"
+      ]
+    },
+    {
+      "key": "type",
+      "type": "select",
+      "name": "Type",
+      "options": [
+        "Any",
+        "Manga",
+        "One-Shot",
+        "Doujinshi",
+        "Novel",
+        "Manhwa",
+        "Manhua"
+      ]
+    },
+    {
+      "key": "status",
+      "type": "select",
+      "name": "Status",
+      "options": [
+        "Any",
+        "Completed",
+        "Releasing",
+        "On Hiatus",
+        "Discontinued",
+        "Not Yet Published"
+      ]
+    },
+    {
+      "key": "language",
+      "type": "select",
+      "name": "Language",
+      "options": [
+        "Any",
+        "English",
+        "French",
+        "Spanish",
+        "Spanish (LATAM)",
+        "Portuguese",
+        "Portuguese (BR)",
+        "Japanese"
+      ]
+    },
+    {
+      "key": "year",
+      "type": "select",
+      "name": "Year",
+      "options": [
+        "Any",
+        "2025", "2024", "2023", "2022", "2021", "2020",
+        "2019", "2018", "2017", "2016", "2015", "2014",
+        "2013", "2012", "2011", "2010", "2009",
+        "2000s", "1990s", "1980s", "1970s", "1960s",
+        "1950s", "1940s", "1930s"
+      ]
+    },
+    {
+      "key": "length",
+      "type": "select",
+      "name": "Length",
+      "options": [
+        "Any",
+        ">= 1",
+        ">= 3",
+        ">= 5",
+        ">= 10",
+        ">= 20",
+        ">= 30",
+        ">= 50"
+      ]
+    },
+    {
+      "key": "sort",
+      "type": "select",
+      "name": "Sort by",
+      "options": [
+        "Newest",
+        "Updated",
+        "Added",
+        "Random"
+      ]
+    }
+  ]
+}

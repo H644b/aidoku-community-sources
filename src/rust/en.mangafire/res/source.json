@@ -1,0 +1,18 @@
+{
+  "info": {
+    "id": "rust.mangafire.to",
+    "lang": "en",
+    "name": "MangaFire",
+    "version": 1,
+    "url": "https://mangafire.to",
+    "urls": ["https://mangafire.to"],
+    "nsfw": 1
+  },
+  "languages": [
+    { "code": "en" }
+  ],
+  "listings": [
+    { "name": "Trending" },
+    { "name": "Latest" }
+  ]
+}

@@ -1,0 +1,11 @@
+[package]
+name = "mangafire.to"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+crate-type = ["cdylib"]
+path = "src/lib.rs"
+
+[dependencies]
+aidoku = { git = "https://github.com/Aidoku/aidoku-rs" }

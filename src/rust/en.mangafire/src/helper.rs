@@ -2,14 +2,15 @@ use aidoku::prelude::*;
 use aidoku::AidokuError;
 use aidoku::imports::net::HttpMethod;
 use aidoku::imports::net::Request;
-use aidoku::imports::String;
+use aidoku::alloc::String;
 use aidoku::imports::html::Html;
+use aidoku::alloc::Vec;
 use aidoku::MangaPageResult;
 use aidoku::Manga;
 use aidoku::Chapter;
 use aidoku::Page;
 
-// Simple urlencode implementation
+// Custom urlencode
 pub fn urlencode(input: &str) -> String {
     let mut result = String::new();
     for byte in input.as_bytes() {
@@ -26,27 +27,27 @@ pub fn urlencode(input: &str) -> String {
 }
 
 pub fn get(url: &str) -> String {
-    let resp = Request::new(url, HttpMethod::Get).html().expect("Request failed");
-    resp.text()
+    let html = Request::new(url, HttpMethod::Get).html().expect("Request failed");
+    html.text().unwrap_or_default()
 }
 
-// Add the missing parse functions (implement them properly)
+// Placeholder for parse functions, implement as needed
 pub fn parse_manga_list(html: Html) -> Result<MangaPageResult, AidokuError> {
-    // Implement parsing logic here
+    // Your parsing code here
     todo!()
 }
 
 pub fn parse_manga_details(html: Html, id: String) -> Result<Manga, AidokuError> {
-    // Implement parsing logic here
+    // Your parsing code here
     todo!()
 }
 
 pub fn parse_chapter_list(html: Html) -> Result<Vec<Chapter>, AidokuError> {
-    // Implement parsing logic here
+    // Your parsing code here
     todo!()
 }
 
 pub fn parse_page_list(html: Html) -> Result<Vec<Page>, AidokuError> {
-    // Implement parsing logic here
+    // Your parsing code here
     todo!()
 }

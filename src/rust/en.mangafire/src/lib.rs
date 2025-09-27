@@ -3,22 +3,24 @@ extern crate alloc;
 
 use aidoku::prelude::*;
 use aidoku::AidokuError;
-use aidoku::AidokuErrorKind;
-use aidoku::ContentRating;
-use aidoku::DeepLinkResult;
+use aidoku::error::AidokuErrorKind;
+use aidoku::MangaContentRating;
+use aidoku::DeepLink;
 use aidoku::Filter;
-use aidoku::FilterKind;
+use aidoku::FilterType;
 use aidoku::Manga;
 use aidoku::MangaPageResult;
 use aidoku::MangaStatus;
-use aidoku::Viewer;
+use aidoku::MangaViewer;
 use aidoku::Chapter;
 use aidoku::Page;
 use aidoku::imports::net::HttpMethod;
 use aidoku::imports::net::Request;
-use aidoku::imports::String;
-use aidoku::imports::Vec;
+use aidoku::alloc::String;
+use aidoku::alloc::Vec;
 use aidoku::imports::html::Html;
+use aidoku::Source;
+use aidoku::DeepLinkHandler;
 
 mod helper;
 use helper::*;
@@ -33,57 +35,63 @@ impl Source for MangaFire {
         let mut queries: Vec<String> = Vec::new();
 
         for filter in filters {
-            if let FilterKind::Select = filter.kind {
-                if let Some(value) = filter.value.as_string() {
-                    if value == "Any" { continue; }
-                    let key = filter.name.unwrap_or_default();
-                    match key.as_str() {
-                        "genre" => {
-                            queries.push(format!("genre={}", urlencode(&value.to_lowercase().replace(" ", "-"))));
-                        }
-                        "type" => {
-                            queries.push(format!("type={}", value.to_lowercase()));
-                        }
-                        "status" => {
-                            queries.push(format!("status={}", value.to_lowercase().replace(' ', "-")));
-                        }
-                        "language" => {
-                            let code = match value.as_str() {
-                                "English" => "en",
-                                "French" => "fr",
-                                "Spanish" => "es",
-                                "Spanish (LATAM)" => "es-419",
-                                "Portuguese" => "pt",
-                                "Portuguese (BR)" => "pt-br",
-                                "Japanese" => "ja",
-                                _ => continue,
-                            };
-                            queries.push(format!("lang={}", code));
-                        }
-                        "year" => {
-                            if value != "Any" {
-                                queries.push(format!("year={}", value));
+            match filter.kind {
+                FilterType::Select => {
+                    let key = filter.name;
+                    if let Ok(val) = filter.value.as_string() {
+                        if val == "Any" { continue; }
+                        match key.as_str() {
+                            "genre" => {
+                                queries.push(format!(
+                                    "genre={}",
+                                    urlencode(&val.to_lowercase().replace(" ", "-"))
+                                ));
                             }
-                        }
-                        "length" => {
-                            if value.starts_with(">=") {
-                                let num = value.trim_start_matches(">=").trim();
-                                queries.push(format!("chapters=>{}", num));
+                            "type" => {
+                                queries.push(format!("type={}", val.to_lowercase()));
                             }
+                            "status" => {
+                                queries.push(format!("status={}", val.to_lowercase().replace(' ', "-")));
+                            }
+                            "language" => {
+                                let code = match val.as_str() {
+                                    "English" => "en",
+                                    "French" => "fr",
+                                    "Spanish" => "es",
+                                    "Spanish (LATAM)" => "es-419",
+                                    "Portuguese" => "pt",
+                                    "Portuguese (BR)" => "pt-br",
+                                    "Japanese" => "ja",
+                                    _ => continue,
+                                };
+                                queries.push(format!("lang={}", code));
+                            }
+                            "year" => {
+                                if val != "Any" {
+                                    queries.push(format!("year={}", val));
+                                }
+                            }
+                            "length" => {
+                                if val.starts_with(">=") {
+                                    let num = val.trim_start_matches(">=").trim();
+                                    queries.push(format!("chapters=>{}", num));
+                                }
+                            }
+                            "sort" => {
+                                let mapped = match val.as_str() {
+                                    "Newest" => "new",
+                                    "Updated" => "updated",
+                                    "Added" => "added",
+                                    "Random" => "random",
+                                    _ => continue,
+                                };
+                                queries.push(format!("sort={}", mapped));
+                            }
+                            _ => {}
                         }
-                        "sort" => {
-                            let mapped = match value.as_str() {
-                                "Newest" => "new",
-                                "Updated" => "updated",
-                                "Added" => "added",
-                                "Random" => "random",
-                                _ => continue,
-                            };
-                            queries.push(format!("sort={}", mapped));
-                        }
-                        _ => {}
                     }
                 }
+                _ => {}
             }
         }
 
@@ -115,11 +123,14 @@ impl Source for MangaFire {
 }
 
 impl DeepLinkHandler for MangaFire {
-    fn handle_url(&self, url: String) -> Result<DeepLinkResult, AidokuError> {
+    fn handle_url(&self, url: String) -> Result<DeepLink, AidokuError> {
         if url.contains("/manga/") {
             let id = url.split("/manga/").nth(1).unwrap_or("").to_string();
             let manga = self.get_manga_details(id)?;
-            Ok(DeepLinkResult::Manga(manga))
+            Ok(DeepLink {
+                manga: Some(manga),
+                chapter: None,
+            })
         } else {
             Err(AidokuError {
                 reason: AidokuErrorKind::Unimplemented,
@@ -127,5 +138,3 @@ impl DeepLinkHandler for MangaFire {
         }
     }
 }
-
-register_source!(MangaFire);

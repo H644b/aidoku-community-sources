@@ -9,4 +9,3 @@ path = "src/lib.rs"
 
 [dependencies]
 aidoku = { git = "https://github.com/Aidoku/aidoku-rs" }
-percent-encoding = "2.1"
